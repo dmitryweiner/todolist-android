@@ -1,23 +1,29 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private List<String> list = new ArrayList<>();
+    private final ArrayList<String> list = new ArrayList<String>();
+    private ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +33,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         Button buttonClear = findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(this);
+
+        arrayAdapter = new ArrayAdapter(this, R.layout.row, list);
+        ListView listView = findViewById(R.id.listView);
+        listView.setAdapter(arrayAdapter);
     }
 
     @Override
     public void onClick(View view) {
-        TextView textView = findViewById(R.id.textView);
-        EditText editText = findViewById(R.id.editText);
-
         switch (view.getId()) {
             case R.id.button:
+                EditText editText = findViewById(R.id.editText);
                 list.add(editText.getText().toString());
                 editText.setText("");
                 break;
@@ -45,11 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
-
-        StringBuilder result = new StringBuilder();
-        for(int i = 0; i < list.size(); i++) {
-            result.append(list.get(i)).append("\n");
-        }
-        textView.setText(result);
+        arrayAdapter.notifyDataSetChanged();
     }
 }
