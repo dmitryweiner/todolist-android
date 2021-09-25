@@ -10,7 +10,7 @@
         android:id="@+id/buttonClear"
         android:layout_width="wrap_content"
         android:layout_height="43dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="32dp"
         android:text="clear"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,18 +22,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         android:text="+"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/editText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="33dp"
         android:ems="10"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +46,7 @@
         android:id="@+id/listView"
         android:layout_width="250dp"
         android:layout_height="81dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonClear"
         app:layout_constraintStart_toStartOf="parent"
