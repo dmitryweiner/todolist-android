@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button buttonClear = findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(this);
 
-        arrayAdapter = new ArrayAdapter(this, R.layout.row, list);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         ListView listView = findViewById(R.id.listView);
         listView.setAdapter(arrayAdapter);
     }
