@@ -41,14 +41,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("list", list);
         super.onSaveInstanceState(outState);
     }
+
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         list.addAll((ArrayList<String>) savedInstanceState.getSerializable("list"));
         arrayAdapter.notifyDataSetChanged();
