@@ -1,9 +1,10 @@
-package com.example.myapplication;
+package com.dmitryweiner.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         ListView listView = findViewById(R.id.listView);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                list.remove(i);
+                arrayAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
         listView.setAdapter(arrayAdapter);
     }
 
