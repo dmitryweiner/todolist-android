@@ -5,7 +5,7 @@ import java.util.UUID;
 public class Todo {
     private final String id;
     private final String title;
-    private final boolean isDone;
+    private boolean isDone;
 
     public Todo(String title) {
         this.id = UUID.randomUUID().toString();
@@ -23,5 +23,9 @@ public class Todo {
 
     public boolean getIsDone() {
         return this.isDone;
+    }
+
+    public void toggleIsDone() {
+        this.isDone = !this.isDone;
     }
 }

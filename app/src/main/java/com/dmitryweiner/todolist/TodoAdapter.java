@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,28 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Todo todo = this.todos.get(position);
-        holder.title.setText(todo.getTitle());
+        holder.checkBox.setText(todo.getTitle());
+        holder.checkBox.setChecked(todo.getIsDone());
+        holder.button.setTag(position);
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = holder.getAdapterPosition();
+                TodoAdapter.this.todos.remove(position);
+                TodoAdapter.this.notifyItemRemoved(position);
+                TodoAdapter.this.notifyItemRangeChanged(position, TodoAdapter.this.todos.size());
+            }
+        });
+
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = holder.getAdapterPosition();
+                Todo todo = TodoAdapter.this.todos.get(position);
+                todo.toggleIsDone();
+                TodoAdapter.this.notifyItemChanged(position);
+            }
+        });
     }
 
     @Override
@@ -40,10 +63,12 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView title;
+        final CheckBox checkBox;
+        final Button button;
         ViewHolder(View view){
             super(view);
-            title = view.findViewById(R.id.title);
+            checkBox = view.findViewById(R.id.checkBox);
+            button = view.findViewById(R.id.button);
         }
     }
 }

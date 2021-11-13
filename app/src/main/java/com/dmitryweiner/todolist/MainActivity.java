@@ -32,14 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
-/*        recyclerView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                list.remove(i);
-                arrayAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });*/
         recyclerView.setAdapter(todoAdapter);
     }
 
@@ -61,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.button:
                 EditText editText = findViewById(R.id.editText);
+                if (editText.length() == 0) {
+                    break;
+                }
                 todos.add(new Todo(editText.getText().toString()));
                 editText.setText("");
                 break;
