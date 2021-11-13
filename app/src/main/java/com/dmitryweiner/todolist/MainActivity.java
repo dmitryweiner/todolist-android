@@ -1,20 +1,19 @@
 package com.dmitryweiner.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final ArrayList<String> list = new ArrayList<String>();
-    private ArrayAdapter arrayAdapter;
+    private final ArrayList<Todo> todos = new ArrayList<Todo>();
+    private TodoAdapter todoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,30 +24,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button buttonClear = findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(this);
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        ListView listView = findViewById(R.id.listView);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        todoAdapter = new TodoAdapter(this, todos);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+/*        recyclerView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 list.remove(i);
                 arrayAdapter.notifyDataSetChanged();
                 return false;
             }
-        });
-        listView.setAdapter(arrayAdapter);
+        });*/
+        recyclerView.setAdapter(todoAdapter);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("list", list);
+        outState.putSerializable("list", todos);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        list.addAll((ArrayList<String>) savedInstanceState.getSerializable("list"));
-        arrayAdapter.notifyDataSetChanged();
+        todos.addAll((ArrayList<Todo>) savedInstanceState.getSerializable("list"));
+        todoAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -56,15 +61,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.button:
                 EditText editText = findViewById(R.id.editText);
-                list.add(editText.getText().toString());
+                todos.add(new Todo(editText.getText().toString()));
                 editText.setText("");
                 break;
             case R.id.buttonClear:
-                list.clear();
+                todos.clear();
                 break;
             default:
                 break;
         }
-        arrayAdapter.notifyDataSetChanged();
+        todoAdapter.notifyDataSetChanged();
     }
 }
