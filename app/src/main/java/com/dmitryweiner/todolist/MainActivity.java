@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,6 +26,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         Button buttonClear = findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(this);
+
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int id) {
+                switch (id) {
+                    case R.id.radioButtonAll:
+                        Log.d("TODO", "Filter All");
+                        break;
+                    case R.id.radioButtonDone:
+                        Log.d("TODO", "Filter Done");
+                        break;
+                    case R.id.radioButtonNotDone:
+                        Log.d("TODO", "Filter Not Done");
+                        break;
+                }
+            }
+        });
 
         todoAdapter = new TodoAdapter(this, todos);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
