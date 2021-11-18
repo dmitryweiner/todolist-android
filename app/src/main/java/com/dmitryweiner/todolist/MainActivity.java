@@ -1,8 +1,10 @@
 package com.dmitryweiner.todolist;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,17 +31,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
                 switch (id) {
                     case R.id.radioButtonAll:
-                        Log.d("TODO", "Filter All");
+                        todoAdapter.setFilterMode(TodoAdapter.FILTER_MODE.ALL);
                         break;
                     case R.id.radioButtonDone:
-                        Log.d("TODO", "Filter Done");
+                        todoAdapter.setFilterMode(TodoAdapter.FILTER_MODE.DONE);
                         break;
                     case R.id.radioButtonNotDone:
-                        Log.d("TODO", "Filter Not Done");
+                        todoAdapter.setFilterMode(TodoAdapter.FILTER_MODE.NOT_DONE);
                         break;
                 }
             }
