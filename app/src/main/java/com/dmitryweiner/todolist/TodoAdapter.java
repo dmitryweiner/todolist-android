@@ -15,21 +15,15 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
-    public static enum FILTER_MODE {
-      ALL,
-      DONE,
-      NOT_DONE
-    };
 
     private final LayoutInflater inflater;
-    private final ArrayList<Todo> todos;
-    private ArrayList<Todo> filteredTodos;
-    private FILTER_MODE filterMode = FILTER_MODE.ALL;
+    private final Context context;
+    private ArrayList<Todo> todos;
 
     public TodoAdapter(Context context, ArrayList<Todo> todos) {
         this.inflater = LayoutInflater.from(context);
         this.todos = todos;
-        this.filteredTodos = new ArrayList<Todo>(todos);
+        this.context = context;
     }
 
     @NonNull
@@ -41,7 +35,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Todo todo = this.filteredTodos.get(position);
+        Todo todo = this.todos.get(position);
         holder.checkBox.setText(todo.getTitle());
         holder.checkBox.setChecked(todo.getIsDone());
         holder.button.setTag(position);
@@ -49,10 +43,12 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
-                TodoAdapter.this.todos.remove(TodoAdapter.this.filteredTodos.get(position));
-                TodoAdapter.this.filteredTodos.remove(position);
+                Todo todo = TodoAdapter.this.todos.get(position);
+                TodoAdapter.this.todos.remove(todo);
                 TodoAdapter.this.notifyItemRemoved(position);
-                TodoAdapter.this.notifyItemRangeChanged(position, TodoAdapter.this.filteredTodos.size());
+                TodoAdapter.this.notifyItemRangeChanged(position, TodoAdapter.this.todos.size());
+                MainActivity activity = (MainActivity) TodoAdapter.this.context;
+                activity.notifyItemRemoved(todo.getId());
             }
         });
 
@@ -60,32 +56,17 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
-                Todo todo = TodoAdapter.this.filteredTodos.get(position);
+                Todo todo = TodoAdapter.this.todos.get(position);
                 todo.toggleIsDone();
-                TodoAdapter.this.notifyItemChanged(position);
+                MainActivity activity = (MainActivity) TodoAdapter.this.context;
+                activity.notifyItemChanged();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return this.filteredTodos.size();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void setFilterMode(FILTER_MODE filterMode) {
-        this.filterMode = filterMode;
-        switch (this.filterMode) {
-            case ALL:
-                this.filteredTodos = new ArrayList<Todo>(this.todos);
-                break;
-            case DONE:
-                this.filteredTodos = (ArrayList<Todo>) this.todos.stream().filter(Todo::getIsDone).collect(Collectors.toList());
-                break;
-            case NOT_DONE:
-                this.filteredTodos = (ArrayList<Todo>) this.todos.stream().filter(todo -> !todo.getIsDone()).collect(Collectors.toList());
-                break;
-        }
+        return this.todos.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,5 +77,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             checkBox = view.findViewById(R.id.checkBox);
             button = view.findViewById(R.id.button);
         }
+    }
+
+    public void setTodos(ArrayList<Todo> todos) {
+        this.todos = todos;
+        this.notifyDataSetChanged();
     }
 }
