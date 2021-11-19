@@ -1,6 +1,6 @@
 # Список дел на Java
 
-[Скачать APK](app-debug.apk)
+[Скачать APK](https://github.com/dmitryweiner/android-demonstration/raw/master/app-debug.apk)
 
 ## Используемые технологии
 * BaseAdapter
