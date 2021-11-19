@@ -1,5 +1,7 @@
 # Список дел на Java
 
+[Скачать APK](app_debug.apk)
+
 ## Используемые технологии
 * BaseAdapter
 * RecycledList
