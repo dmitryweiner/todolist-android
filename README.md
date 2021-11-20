@@ -3,6 +3,7 @@
 [Скачать APK](https://github.com/dmitryweiner/android-demonstration/raw/master/app-debug.apk)
 
 ## Используемые технологии
+* SQLite
 * BaseAdapter
 * RecycledList
 * ArrayList
