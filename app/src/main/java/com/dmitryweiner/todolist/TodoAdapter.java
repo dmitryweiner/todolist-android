@@ -56,7 +56,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
                 Todo todo = TodoAdapter.this.todos.get(position);
                 todo.toggleIsDone();
                 MainActivity activity = (MainActivity) TodoAdapter.this.context;
-                activity.notifyItemChanged();
+                activity.notifyItemChanged(todo);
             }
         });
     }

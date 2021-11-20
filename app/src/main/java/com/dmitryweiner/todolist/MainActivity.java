@@ -20,14 +20,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NOT_DONE
     };
 
-    private final ArrayList<Todo> todos = new ArrayList<Todo>();
-    private ArrayList<Todo> filteredTodos = new ArrayList<Todo>();
+    private ArrayList<Todo> todos;
+    private ArrayList<Todo> filteredTodos;
     private TodoAdapter todoAdapter;
     private FILTER_MODE filterMode = FILTER_MODE.ALL;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbHelper = new DBHelper(this);
+        todos = dbHelper.getTodos();
+        filteredTodos = new ArrayList<Todo>(todos);
         setContentView(R.layout.activity_main);
         Button button = findViewById(R.id.button);
         button.setOnClickListener(this);
@@ -73,7 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        todos = new ArrayList<Todo>();
         todos.addAll((ArrayList<Todo>) savedInstanceState.getSerializable("list"));
+        filteredTodos = new ArrayList<Todo>(todos);
         todoAdapter.notifyDataSetChanged();
     }
 
@@ -86,11 +92,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (title.length() == 0) {
                     break;
                 }
-                todos.add(new Todo(title));
+                Todo todo = new Todo(title);
+                todos.add(todo);
+                dbHelper.addTodo(todo);
                 editText.setText("");
                 break;
             case R.id.buttonClear:
                 todos.clear();
+                dbHelper.removeAllTodos();
                 break;
             default:
                 break;
@@ -113,13 +122,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if (foundTodo != null) {
-            this.todos.remove(foundTodo);
+            todos.remove(foundTodo);
+            dbHelper.removeTodo(foundTodo);
         }
     }
 
-    public void notifyItemChanged() {
-        this.filteredTodos = getFilteredTodos(this.todos, this.filterMode);
-        this.todoAdapter.setTodos(this.filteredTodos);
+    public void notifyItemChanged(Todo todo) {
+        filteredTodos = getFilteredTodos(this.todos, this.filterMode);
+        todoAdapter.setTodos(this.filteredTodos);
+        dbHelper.updateTodo(todo);
     }
 
     public ArrayList<Todo> getFilteredTodos(ArrayList<Todo> todos, FILTER_MODE filterMode) {
